@@ -7,16 +7,16 @@
     <link href="/static/css/htut.css" rel="stylesheet">
   </head>
   <body>
-    <form id="upload-form" class="well">
+    <form id="upload-form" class="well" method="POST" enctype="multipart/form-data">
       <p class="help-block">Instructions: Upload a plain text file</p>
       <div class="form-group">
         <label for="document-name">Document name</label>
-        <input type="password" class="form-control" id="document-name" placeholder="Document">
+        <input type="text" class="form-control" name="document-name" id="document-name" placeholder="Document">
       </div>
       
       <div class="form-group">
         <label for="input-file">File input</label>
-        <input type="file" id="input-file">
+        <input type="file" name="input-file" id="input-file">
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
   </body>
