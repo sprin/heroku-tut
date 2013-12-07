@@ -36,6 +36,7 @@ Clone the tutorial repo and fetch all the tags:
    git clone git@github.com:sprin/heroku-tut.git
    git fetch --tags
 
+
 In the Heroku UI, start a new app and give it a name. Use the format
 ``{{your_handle}}-htut``, eg. ``sprin-htut``.
 
@@ -53,9 +54,15 @@ Push the first tag to Heroku to deploy!
 
 Watch as Heroku herds green unicorns and such.
 
-Visit your app at ``http://{{your-handle}}-htut.herokuapp.com``.
+Visit your app at ``http://{{your_handle}}-htut.herokuapp.com``.
 
-Setting Config Vars
+Let's take a look at that tag:
+
+.. code:: bash
+
+  git checkout 0.1.0-hello-world
+
+Set config vars
 -------------------
 
 "Hello from..." - oops.
@@ -68,4 +75,42 @@ how you configure Heroku apps. Heroku calls them config vars. Let's set the
 .. code:: bash
 
    heroku config:set ME=sprin
+
+Upload files to S3
+------------------
+
+You can't store files on the local filesystem with Heroku instances. If you
+want to store files, such as user uploads, you can use Amazon S3.
+
+Assuming you already have an S3 account, create a new bucket called
+``{{your_handle}}-htut``. This example uses the Northern California (us-west-1)
+region. Make a directory in it called ``files``.
+
+Checkout the next tag:
+
+.. code:: bash
+
+  git checkout 0.2.0-s3-uploads
+
+We need to set the following config vars for S3:
+
+
+.. code:: bash
+
+   heroku config:set S3_LOCATION='https://s3-us-west-1.amazonaws.com/'
+   heroku config:set S3_KEY={{your_s3_key}}
+   heroku config:set S3_SECRET={{your_s3_secret_key}}
+   heroku config:set S3_UPLOAD_DIRECTORY='files'
+   heroku config:set S3_BUCKET='{{your_handle}}-htut'
+
+This example uses Flask sessions. To use sessions inside Flask, you need to
+set a secret key. It can be any secret, complex, random value.
+
+.. code:: bash
+
+heroku config:set FLASK_SECRET_KEY={{secret_complex_random_value}}
+
+Now let's deploy this tag:
+
+  git push heroku 0.2.0-s3-uploads
 
