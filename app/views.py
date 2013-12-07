@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, request
+from flask import render_template, request, flash
 from utils import s3_upload
 
 from app import app
@@ -16,8 +16,9 @@ def handle_upload():
     # Upload to S3 synchronously
     destination = s3_upload(f)
 
-    resp = '"{document_name}" uploaded to S3 as {dst}'.format(
+    flash('"{document_name}" uploaded to S3 as <a href="{dst}">{dst}</a>'.format(
         document_name=document_name,
         dst=destination,
-    )
-    return resp
+    ))
+    return render_template('index.html')
+

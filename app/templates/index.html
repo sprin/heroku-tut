@@ -7,6 +7,15 @@
     <link href="/static/css/htut.css" rel="stylesheet">
   </head>
   <body>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success">
+      <strong>Success!</strong> {{ message|safe }}
+    </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
     <form id="upload-form" class="well" method="POST" enctype="multipart/form-data">
       <p class="help-block">Instructions: Upload a plain text file</p>
       <div class="form-group">
@@ -19,5 +28,6 @@
         <input type="file" name="input-file" id="input-file">
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
+    
   </body>
 </html>
