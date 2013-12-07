@@ -29,11 +29,12 @@ Let's begin
 Deploy your first app
 ---------------------
 
-Clone the tutorial repo:
+Clone the tutorial repo and fetch all the tags:
 
 .. code:: bash
 
    git clone git@github.com:sprin/heroku-tut.git
+   git fetch --tags
 
 In the Heroku UI, start a new app and give it a name. Use the format
 ``{{your_handle}}-htut``, eg. ``sprin-htut``.
@@ -44,11 +45,11 @@ In your local repo, add the newly-created Heroku repo as a remote:
 
    git remote add heroku git@heroku.com:sprin-htut.git
 
-Push to Heroku to deploy!
+Push the first tag to Heroku to deploy!
 
 .. code:: bash
 
-   git push heroku master
+   git push heroku 0.1.0-hello-world
 
 Watch as Heroku herds green unicorns and such.
 
