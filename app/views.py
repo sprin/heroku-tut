@@ -9,8 +9,9 @@ from flask import (
 from utils import (
     s3_upload,
     test_conn,
-    insert_file_upload,
-    fetch_word_counts,
+    insert_file_upload_meta,
+    fetch_file_upload_meta,
+    slugify,
 )
 from word_count import count_words
 
@@ -33,8 +34,9 @@ def handle_upload():
     word_counts = count_words(f.read())
 
     # Insert counts into DB
-    insert_file_upload(
+    insert_file_upload_meta(
         document_name = document_name,
+        document_slug = slugify(document_name),
         filename = f.filename,
         word_counts = word_counts,
     )
@@ -45,14 +47,15 @@ def handle_upload():
     ))
     return render_template('index.html')
 
-@app.route('/wordcloud/<document_name>', methods=['GET'])
-def word_cloud(document_name):
-    word_counts= fetch_word_counts(document_name)
+@app.route('/wordcloud/<document_slug>', methods=['GET'])
+def word_cloud(document_slug):
+    meta= fetch_file_upload_meta(document_slug)
     bootstrapped = {
-        'word_counts': word_counts,
+        'word_counts': meta['word_counts'],
     }
     ctx = {
         'bootstrapped': json.dumps(bootstrapped),
+        'document_name': meta['document_name'],
     }
     return render_template('word_cloud.html', **ctx)
 
