@@ -8,12 +8,13 @@ def create_tables():
     cur = conn.cursor()
     cur.execute(
 """
-CREATE TABLE file_upload(
-    document_name TEXT
-    , time_uploaded TEXT DEFAULT now()
+CREATE TABLE file_upload_meta(
+    document_name TEXT NOT NULL
+    , document_slug TEXT NOT NULL
+    , time_uploaded TEXT NOT NULL DEFAULT now()
     , filename TEXT NOT NULL
     , word_counts JSON NOT NULL
-    , PRIMARY KEY(document_name, time_uploaded)
+    , PRIMARY KEY(document_slug, time_uploaded)
 );
 """
     )
