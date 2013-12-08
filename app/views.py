@@ -47,7 +47,7 @@ def handle_upload():
     flash(
         '"{document_name}" uploaded to S3 as <a href="{dst}">{dst}</a>'
         '<br><br>Check out your word cloud at '
-        '<a href="/wordcloud/{slug}">{base}/wordcloud/{slug}</a>!'
+        '<a href="/wordcloud/{slug}">{base}wordcloud/{slug}</a>!'
         .format(
             document_name = document_name,
             dst = destination,
