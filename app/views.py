@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, request, flash
-from utils import s3_upload
+from flask import render_template, request, flash, jsonify
+from utils import s3_upload, test_conn
+from tables import reflect_database
 
 from app import app
 
@@ -21,4 +22,12 @@ def handle_upload():
         dst=destination,
     ))
     return render_template('index.html')
+
+@app.route('/test_connection', methods=['GET'])
+def test_connection():
+    """
+    Insert a fake record into the database and return the values of the
+    newly created row (using RETURNING).
+    """
+    return jsonify(result=test_conn())
 

@@ -1,8 +1,10 @@
 from uuid import uuid4
 import boto
 import os.path
-from flask import current_app as app
+from app import app
 from werkzeug import secure_filename
+import tables
+from tables import result_as_list_of_dicts
 
 def s3_upload(source_file,acl='public-read'):
     source_filename = secure_filename(source_file.filename)
@@ -35,4 +37,24 @@ def s3_upload(source_file,acl='public-read'):
     )
 
     return path
+
+def test_conn():
+    t = tables.reflected['file_upload']
+    query = (
+        t
+        .insert()
+        .values(
+            document_name = 'Fake Document',
+            filename = 'does_not_exist.txt',
+            word_counts = '{}',
+        )
+        .returning(
+            t.c.document_name,
+            t.c.time_uploaded,
+            t.c.filename,
+            t.c.word_counts,
+        )
+    )
+    result = result_as_list_of_dicts(query)
+    return result
 
