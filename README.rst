@@ -100,7 +100,7 @@ We need to set the following config vars for S3:
 
 .. code:: bash
 
-   heroku config:set S3_LOCATION='https://s3-us-west-1.amazonaws.com/'
+   heroku config:set S3_LOCATION=https://s3-us-west-1.amazonaws.com/
    heroku config:set S3_KEY={{your_s3_key}}
    heroku config:set S3_SECRET={{your_s3_secret_key}}
    heroku config:set S3_UPLOAD_DIRECTORY='files'
@@ -116,4 +116,54 @@ heroku config:set FLASK_SECRET_KEY={{secret_complex_random_value}}
 Now let's deploy this tag:
 
   git push heroku 0.2.0-s3-uploads^{}:master
+
+Create a Postgres Database
+--------------------------
+
+Head to  https://postgres.heroku.com/databases to fire up a DB. Launch a
+"Dev Plan (free)" database. Once it initializes, get the connection settings.
+Note that you can connect instantly with psql by clicking the connection
+settings icon, selecting the PSQL option, and pasting the command into a
+shell. But we want our application to connect, so let's set some more config
+vars!
+
+.. code:: bash
+
+   heroku config:set DB_USER={{your_db_user}}
+   heroku config:set DB_PASSWORD={{your_db_password}}
+   heroku config:set DB_HOST={{your_db_host}}
+   heroku config:set DB_PORT={{your_db_post}}
+   heroku config:set DB_NAME={{your_db_name}}
+
+Run a One-off Dyno
+------------------
+
+Now let's check out the tag which will read those config vars:
+
+.. code:: bash
+
+  git checkout 0.3.0-postgres
+
+Let's run a "one-off" dyno to create the initial table in Postgres:
+
+.. code:: bash
+
+   heroku run python app/initial_tables.py
+
+Restart the app
+---------------
+
+With the tables created, let's restart the app to reflect the new tables.
+
+.. code:: bash
+
+   heroku restart web
+
+Test the connection
+-------------------
+
+In this tag, there's a new view which tests the connection by inserting a
+fake record into a table, and returns the result as JSON at
+``http://{{your_handle}}-htut.herokuapp.com/test_connection``.
+
 
