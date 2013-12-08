@@ -1,6 +1,17 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, request, flash, jsonify
-from utils import s3_upload, test_conn, insert_file_upload
+import json
+from flask import (
+    render_template,
+    request,
+    flash,
+    jsonify,
+)
+from utils import (
+    s3_upload,
+    test_conn,
+    insert_file_upload,
+    fetch_word_counts,
+)
 from word_count import count_words
 
 from app import app
@@ -34,9 +45,16 @@ def handle_upload():
     ))
     return render_template('index.html')
 
-@app.route('/wordcloud/', methods=['GET'])
-def word_cloud():
-    return render_template('word_cloud.html')
+@app.route('/wordcloud/<document_name>', methods=['GET'])
+def word_cloud(document_name):
+    word_counts= fetch_word_counts(document_name)
+    bootstrapped = {
+        'word_counts': word_counts,
+    }
+    ctx = {
+        'bootstrapped': json.dumps(bootstrapped),
+    }
+    return render_template('word_cloud.html', **ctx)
 
 @app.route('/test_connection', methods=['GET'])
 def test_connection():

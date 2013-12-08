@@ -1,9 +1,11 @@
 import json
-from uuid import uuid4
+import os
 import boto
-import os.path
-from app import app
+from sqlalchemy import select
+from uuid import uuid4
 from werkzeug import secure_filename
+
+from app import app
 import tables
 from tables import result_as_list_of_dicts
 
@@ -72,4 +74,25 @@ def insert_file_upload(
     )
     result = result_as_list_of_dicts(query)
     return result
+
+def fetch_word_counts(document_name):
+    t = tables.reflected['file_upload']
+    query = (
+        select([
+            t.c.word_counts,
+        ])
+        .where(
+            t.c.document_name == document_name
+        )
+    )
+    result = result_as_list_of_dicts(query)
+    if result:
+        return result.word_counts
+    else:
+        return {
+            'error': 5,
+            'nosuch': 3,
+            'document': 2,
+            'name': 1
+        }
 
