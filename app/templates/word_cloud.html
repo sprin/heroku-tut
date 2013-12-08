@@ -1,6 +1,10 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<body>
+<head>
+  <meta charset="utf-8">
+  <title>{{document_name}}</title>
+  <link href="/static/css/htut.css" rel="stylesheet">
+<head>
+<body></body>
 <script src="/static/vendor/d3/d3.v3.min.js"></script>
 <script src="/static/vendor/underscore/underscore.js"></script>
 <script src="/static/vendor/d3-cloud/d3.layout.cloud.js"></script>
@@ -28,8 +32,10 @@
 
   function draw(words) {
     d3.select("body").append("svg")
-        .attr("wth", w)
-        .attr("heigh", h)
+        .attr("id", "word-cloud")
+        .style("margin-left", -w/2 + "px")
+        .attr("width", w)
+        .attr("height", h)
       .append("g")
         .attr("transform", "translate(" + w/2 +"," + h/2 + ")")
       .selectAll("text")

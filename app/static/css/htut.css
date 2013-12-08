@@ -6,4 +6,10 @@
   left: 50%;
   margin-left: -150px;
 }
+#word-cloud {
+  position: fixed;
+  top: 75px;
+  left: 50%;
+}
+
 
