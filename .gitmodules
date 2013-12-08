@@ -1,0 +1,3 @@
+[submodule "app/static/vendor/d3-cloud"]
+	path = app/static/vendor/d3-cloud
+	url = https://github.com/jasondavies/d3-cloud
