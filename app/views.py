@@ -34,6 +34,10 @@ def handle_upload():
     ))
     return render_template('index.html')
 
+@app.route('/wordcloud/', methods=['GET'])
+def word_cloud():
+    return render_template('word_cloud.html')
+
 @app.route('/test_connection', methods=['GET'])
 def test_connection():
     """
