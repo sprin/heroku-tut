@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, request, flash, jsonify
-from utils import s3_upload, test_conn
-from tables import reflect_database
+from utils import s3_upload, test_conn, insert_file_upload
+from word_count import count_words
 
 from app import app
 
@@ -16,6 +16,17 @@ def handle_upload():
 
     # Upload to S3 synchronously
     destination = s3_upload(f)
+
+    # Run word count on the file content
+    f.seek(0)
+    word_counts = count_words(f.read())
+
+    # Insert counts into DB
+    insert_file_upload(
+        document_name = document_name,
+        filename = f.filename,
+        word_counts = word_counts,
+    )
 
     flash('"{document_name}" uploaded to S3 as <a href="{dst}">{dst}</a>'.format(
         document_name=document_name,

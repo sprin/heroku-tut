@@ -1,3 +1,4 @@
+import json
 from uuid import uuid4
 import boto
 import os.path
@@ -39,14 +40,28 @@ def s3_upload(source_file,acl='public-read'):
     return path
 
 def test_conn():
+    return insert_file_upload(
+        document_name = 'Fake Document',
+        filename = 'does_not_exist.txt',
+        word_counts = {},
+    )
+
+def insert_file_upload(
+    document_name = None,
+    filename = None,
+    word_counts = None
+):
+    if None in [document_name, filename, word_counts]:
+        return ValueError('missing required named params')
+
     t = tables.reflected['file_upload']
     query = (
         t
         .insert()
         .values(
-            document_name = 'Fake Document',
-            filename = 'does_not_exist.txt',
-            word_counts = '{}',
+            document_name = document_name,
+            filename = filename,
+            word_counts = json.dumps(word_counts),
         )
         .returning(
             t.c.document_name,
