@@ -50,7 +50,10 @@ Push the first tag to Heroku to deploy!
 
 .. code:: bash
 
-   git push heroku 0.1.0-hello-world
+   git push heroku 0.1.0-hello-world^{}:master
+
+Heroku only deploys code from pushes to it's master branch. However, above,
+we push a local tag to Heroku's master branch.
 
 Watch as Heroku herds green unicorns and such.
 
@@ -112,5 +115,5 @@ heroku config:set FLASK_SECRET_KEY={{secret_complex_random_value}}
 
 Now let's deploy this tag:
 
-  git push heroku 0.2.0-s3-uploads
+  git push heroku 0.2.0-s3-uploads^{}:master
 
