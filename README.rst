@@ -138,11 +138,12 @@ vars!
 Run a One-off Dyno
 ------------------
 
-Now let's check out the tag which will read those config vars:
+Now let's check out and push the tag which will read those config vars:
 
 .. code::
 
   git checkout 0.3.0-postgres
+  git push heroku 0.3.0-postgres^{}:master
 
 Let's run a "one-off" dyno to create the initial table in Postgres:
 
@@ -167,4 +168,25 @@ fake record into a table, and returns the result as JSON at
 ``http://{{your_handle}}-htut.herokuapp.com/test_connection``.
 
 .. unicorns unicorns unicorns moar unicorns
+
+Now for some fun
+----------------
+
+This one's a freebie... no new configuration needed, just checkout and
+push a new tag.
+
+.. code::
+
+  git checkout 0.4.0-wordcount
+  git push heroku 0.4.0-wordcount^{}:master
+
+Now upload a file and look for a new link in the success message.
+
+Submodules
+----------
+
+This new tag introduced a submodule... an external git repository referenced
+from our repository. Heroku fetches any submodules contained within the pushed
+repository, so that you can use code from submodules without having to copy
+their code into your repository.
 
