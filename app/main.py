@@ -7,5 +7,7 @@ This loader pattern from:
 http://charlesleifer.com/blog/structuring-flask-apps-a-how-to-for-those-coming-from-django/
 """
 from app import app
+# trigger table reflection
+from tables import *
 from views import *
 
