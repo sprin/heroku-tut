@@ -33,17 +33,26 @@ def handle_upload():
     f.seek(0)
     word_counts = count_words(f.read())
 
+    # Create slug for document
+    document_slug = slugify(document_name)
+
     # Insert counts into DB
     insert_file_upload_meta(
         document_name = document_name,
-        document_slug = slugify(document_name),
+        document_slug = document_slug,
         filename = f.filename,
         word_counts = word_counts,
     )
 
-    flash('"{document_name}" uploaded to S3 as <a href="{dst}">{dst}</a>'.format(
-        document_name=document_name,
-        dst=destination,
+    flash(
+        '"{document_name}" uploaded to S3 as <a href="{dst}">{dst}</a>'
+        '<br><br>Check out your word cloud at '
+        '<a href="/wordcloud/{slug}">{base}/wordcloud/{slug}</a>!'
+        .format(
+            document_name = document_name,
+            dst = destination,
+            slug = document_slug,
+            base = request.base_url,
     ))
     return render_template('index.html')
 
