@@ -31,7 +31,7 @@ Deploy your first app
 
 Clone the tutorial repo and fetch all the tags:
 
-.. code:: bash
+.. code::
 
    git clone git@github.com:sprin/heroku-tut.git
    git fetch --tags
@@ -42,13 +42,13 @@ In the Heroku UI, start a new app and give it a name. Use the format
 
 In your local repo, add the newly-created Heroku repo as a remote:
 
-.. code:: bash
+.. code::
 
    git remote add heroku git@heroku.com:sprin-htut.git
 
 Push the first tag to Heroku to deploy!
 
-.. code:: bash
+.. code::
 
    git push heroku 0.1.0-hello-world^{}:master
 
@@ -61,7 +61,7 @@ Visit your app at ``http://{{your_handle}}-htut.herokuapp.com``.
 
 Let's take a look at that tag:
 
-.. code:: bash
+.. code::
 
   git checkout 0.1.0-hello-world
 
@@ -75,7 +75,7 @@ Ah, it's coming from an environment variable. Environment variables are
 how you configure Heroku apps. Heroku calls them config vars. Let's set the
 ``ME`` config var to your handle.
 
-.. code:: bash
+.. code::
 
    heroku config:set ME=sprin
 
@@ -91,14 +91,14 @@ region. Make a directory in it called ``files``.
 
 Checkout the next tag:
 
-.. code:: bash
+.. code::
 
   git checkout 0.2.0-s3-uploads
 
 We need to set the following config vars for S3:
 
 
-.. code:: bash
+.. code::
 
    heroku config:set S3_LOCATION=https://s3-us-west-1.amazonaws.com/
    heroku config:set S3_KEY={{your_s3_key}}
@@ -109,7 +109,7 @@ We need to set the following config vars for S3:
 This example uses Flask sessions. To use sessions inside Flask, you need to
 set a secret key. It can be any secret, complex, random value.
 
-.. code:: bash
+.. code::
 
 heroku config:set FLASK_SECRET_KEY={{secret_complex_random_value}}
 
@@ -127,7 +127,7 @@ settings icon, selecting the PSQL option, and pasting the command into a
 shell. But we want our application to connect, so let's set some more config
 vars!
 
-.. code:: bash
+.. code::
 
    heroku config:set DB_USER={{your_db_user}}
    heroku config:set DB_PASSWORD={{your_db_password}}
@@ -140,13 +140,13 @@ Run a One-off Dyno
 
 Now let's check out the tag which will read those config vars:
 
-.. code:: bash
+.. code::
 
   git checkout 0.3.0-postgres
 
 Let's run a "one-off" dyno to create the initial table in Postgres:
 
-.. code:: bash
+.. code::
 
    heroku run python app/initial_tables.py
 
@@ -155,7 +155,7 @@ Restart the app
 
 With the tables created, let's restart the app to reflect the new tables.
 
-.. code:: bash
+.. code::
 
    heroku restart web
 
@@ -166,4 +166,5 @@ In this tag, there's a new view which tests the connection by inserting a
 fake record into a table, and returns the result as JSON at
 ``http://{{your_handle}}-htut.herokuapp.com/test_connection``.
 
+.. unicorns unicorns unicorns moar unicorns
 
