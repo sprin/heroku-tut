@@ -34,6 +34,7 @@ Clone the tutorial repo and fetch all the tags:
 .. code::
 
    git clone https://github.com/sprin/heroku-tut.git
+   cd heroku-tut
    git fetch --tags
 
 
