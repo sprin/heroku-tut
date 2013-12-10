@@ -33,7 +33,7 @@ Clone the tutorial repo and fetch all the tags:
 
 .. code::
 
-   git clone git@github.com:sprin/heroku-tut.git
+   git clone https://github.com/sprin/heroku-tut.git
    git fetch --tags
 
 
