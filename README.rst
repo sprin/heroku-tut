@@ -120,20 +120,21 @@ Now let's deploy this tag:
 Create a Postgres Database
 --------------------------
 
-Head to  https://postgres.heroku.com/databases to fire up a DB. Launch a
-"Dev Plan (free)" database. Once it initializes, get the connection settings.
-Note that you can connect instantly with psql by clicking the connection
-settings icon, selecting the PSQL option, and pasting the command into a
-shell. But we want our application to connect, so let's set some more config
-vars!
+Let's provision a database via the command line:
 
 .. code::
 
-   heroku config:set DB_USER={{your_db_user}}
-   heroku config:set DB_PASSWORD={{your_db_password}}
-   heroku config:set DB_HOST={{your_db_host}}
-   heroku config:set DB_PORT={{your_db_post}}
-   heroku config:set DB_NAME={{your_db_name}}
+   heroku addons:add heroku-postgresql:dev
+
+This will set up a database and print the config var which holds the connection
+string. Heroku assumes you may want to configure more than one database per
+app, but if not, you can change the config var to simply ``DATABASE_URL``. So
+if the printed connection string is ``HEROKU_POSTGRESQL_ORANGE_URL``, we can
+do:
+
+.. code::
+
+   heroku pg:promote HEROKU_POSTGRESQL_ORANGE_URL
 
 Run a One-off Dyno
 ------------------
