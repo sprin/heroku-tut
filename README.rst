@@ -45,7 +45,7 @@ In your local repo, add the newly-created Heroku repo as a remote:
 
 .. code::
 
-   git remote add heroku git@heroku.com:sprin-htut.git
+   git remote add heroku git@heroku.com:{{your_handle}}-htut.git
 
 Push the first tag to Heroku to deploy!
 
