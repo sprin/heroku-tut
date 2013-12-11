@@ -8,4 +8,5 @@ gevent==0.13.8
 greenlet==0.4.1
 gunicorn==18.0
 itsdangerous==0.23
+pika==0.9.13
 psycopg2==2.5.1
