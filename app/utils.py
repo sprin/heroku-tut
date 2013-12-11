@@ -38,18 +38,21 @@ def s3_upload(source_file,acl='public-read'):
     # Set the file's permissions.
     sml.set_acl(acl)
 
-    # Return the HTTP path to the file
-    path = "{loc}{bucket_name}/{key}".format(
+    # Return the key to the file
+    return key
+
+def get_s3_path(key):
+    return "{loc}{bucket_name}/{key}".format(
         loc = app.config["S3_LOCATION"],
-        bucket_name = bucket_name,
+        bucket_name = app.config["S3_BUCKET"],
         key = key,
     )
-
-    return path
 
 def test_conn():
     return insert_file_upload_meta(
         document_name = 'Fake Document',
+        document_slug = 'fake_document',
+        s3_key = 'files/does_not_exist.txt',
         filename = 'does_not_exist.txt',
         word_counts = {},
     )
@@ -57,10 +60,11 @@ def test_conn():
 def insert_file_upload_meta(
     document_name = None,
     document_slug = None,
+    s3_key = None,
     filename = None,
     word_counts = None
 ):
-    if None in [document_name, document_slug, filename, word_counts]:
+    if None in [document_name, document_slug, s3_key, filename, word_counts]:
         return ValueError('missing required named params')
 
     t = tables.reflected['file_upload_meta']
@@ -70,12 +74,14 @@ def insert_file_upload_meta(
         .values(
             document_name = document_name,
             document_slug = document_slug,
+            s3_key = s3_key,
             filename = filename,
             word_counts = json.dumps(word_counts),
         )
         .returning(
             t.c.document_name,
             t.c.document_slug,
+            t.c.s3_key,
             t.c.time_uploaded,
             t.c.filename,
             t.c.word_counts,

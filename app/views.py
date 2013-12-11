@@ -8,6 +8,7 @@ from flask import (
 )
 from utils import (
     s3_upload,
+    get_s3_path,
     test_conn,
     insert_file_upload_meta,
     fetch_file_upload_meta,
@@ -27,7 +28,7 @@ def handle_upload():
     f = request.files['input-file']
 
     # Upload to S3 synchronously
-    destination = s3_upload(f)
+    s3_key = s3_upload(f)
 
     # Run word count on the file content
     f.seek(0)
@@ -40,6 +41,7 @@ def handle_upload():
     insert_file_upload_meta(
         document_name = document_name,
         document_slug = document_slug,
+        s3_key = s3_key,
         filename = f.filename,
         word_counts = word_counts,
     )
@@ -50,7 +52,7 @@ def handle_upload():
         '<a href="/wordcloud/{slug}">{base}wordcloud/{slug}</a>!'
         .format(
             document_name = document_name,
-            dst = destination,
+            dst = get_s3_path(s3_key),
             slug = document_slug,
             base = request.base_url,
     ))

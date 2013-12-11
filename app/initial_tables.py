@@ -12,8 +12,9 @@ CREATE TABLE file_upload_meta(
     document_name TEXT NOT NULL
     , document_slug TEXT NOT NULL
     , time_uploaded TEXT NOT NULL DEFAULT now()
+    , s3_key TEXT NOT NULL
     , filename TEXT NOT NULL
-    , word_counts JSON NOT NULL
+    , word_counts JSON
     , PRIMARY KEY(document_slug, time_uploaded)
 );
 """
