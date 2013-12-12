@@ -4,13 +4,13 @@ import re
 from unicodedata import normalize
 
 import boto
-from sqlalchemy import select
 from uuid import uuid4
 from werkzeug import secure_filename
 
 from app import app
 import tables
 from tables import result_as_list_of_dicts
+from amqp_connection import get_amqp_connection
 
 
 _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
@@ -83,7 +83,7 @@ def insert_file_upload_meta(
             t.c.filename,
         )
     )
-    result = result_as_list_of_dicts(query)
+    result = result_as_list_of_dicts(query)[0]
     return result
 
 def fetch_file_upload_meta(document_slug):
@@ -121,4 +121,21 @@ def slugify(text, delim=u'-'):
         if word:
             result.append(word)
     return unicode(delim.join(result))
+
+def put_doc_on_queue(
+    document_slug = None,
+    time_uploaded = None,
+    s3_key = None,
+):
+    if None in [document_slug, time_uploaded, s3_key]:
+        return ValueError('missing required named params')
+    connection = get_amqp_connection()
+    channel = connection.channel() # start a channel
+    channel.queue_declare(queue='countwords') # Declare a queue
+    msg = json.dumps({
+        'document_slug': document_slug,
+        'time_uploaded': time_uploaded.isoformat(),
+        's3_key': s3_key,
+    })
+    channel.basic_publish(exchange='', routing_key='countwords', body=msg)
 

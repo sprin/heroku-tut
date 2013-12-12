@@ -13,6 +13,7 @@ from utils import (
     insert_file_upload_meta,
     fetch_file_upload_meta,
     slugify,
+    put_doc_on_queue,
 )
 from word_count import count_words
 
@@ -34,11 +35,17 @@ def handle_upload():
     document_slug = slugify(document_name)
 
     # Insert counts into DB
-    insert_file_upload_meta(
+    upload_meta = insert_file_upload_meta(
         document_name = document_name,
         document_slug = document_slug,
         s3_key = s3_key,
         filename = f.filename,
+    )
+
+    put_doc_on_queue(
+        document_slug = document_slug,
+        time_uploaded = upload_meta['time_uploaded'],
+        s3_key = s3_key,
     )
 
     flash(
