@@ -8,7 +8,7 @@ new components incrementally added to the application. These snapshots are
 marked by release tags. The components demonstrated are:
 
  - Amazon S3
- - Heroku Postgres
+ - Postgres
  - CloudAMPQ
 
 The final application will take a file upload, store the file on S3,
@@ -67,13 +67,13 @@ Let's take a look at that tag:
   git checkout 0.1.0-hello-world
 
 Set config vars
--------------------
+---------------
 
 "Hello from..." - oops.
 Let's see where that is coming from and fix it.
 
 Ah, it's coming from an environment variable. Environment variables are
-how you configure Heroku apps. Heroku calls them config vars. Let's set the
+how you configure apps. Heroku calls them config vars. Let's set the
 ``ME`` config var to your handle.
 
 .. code::
@@ -165,24 +165,16 @@ With the tables created, let's restart the app to reflect the new tables.
 Test the connection
 -------------------
 
-In this tag, there's a new view which tests the connection by inserting a
-fake record into a table, and returns the result as JSON at
-``http://{{your_handle}}-htut.herokuapp.com/test_connection``.
+In this tag, there's a new view which tests the connection to the Postgres
+database by inserting a fake record into a table, and returns the result as
+JSON at ``http://{{your_handle}}-htut.herokuapp.com/test_connection``.
 
 .. unicorns unicorns unicorns moar unicorns
 
 Now for some fun
 ----------------
 
-This one's a freebie... no new configuration needed, just checkout and
-push a new tag.
-
-.. code::
-
-  git checkout 0.4.0-wordcount
-  git push heroku 0.4.0-wordcount^{}:master
-
-Now upload a file and look for a new link in the success message.
+Upload a file and look for a new link in the success message.
 
 Submodules
 ----------
@@ -190,5 +182,63 @@ Submodules
 This new tag introduced a submodule... an external git repository referenced
 from our repository. Heroku fetches any submodules contained within the pushed
 repository, so that you can use code from submodules without having to copy
-their code into your repository.
+their code into your repository. Submodules also allow for easy
+updating of the external repo's code. However, a production setup
+should probably keep a cloned repo around which application repos can
+reference, rather than the external repo itself. This protects against
+the breakage or unavailability of the external repo.
+
+CloudAMQP
+---------
+
+CloudAMQP is a hosted RabbitMQ service. RabbitMQ is a message queueing
+framework which allows us to create jobs to be processed asynchronously.
+Rather than tying up a web process to do heavy-lifting, we can offload the
+work to another process, called a worker. Perhaps more importantly for large
+applications, queuing allows an application to be decomposed into many
+independent pieces - they can even be written in different languages.
+
+If we have a single web process performing the word count, and a large
+file is uploaded, we may be unable to serve other requests. So let's offload
+the word count to a worker process. First, let's provision the RabbitMQ
+service:
+
+.. code::
+
+   heroku addons:add cloudamqp
+
+
+Now let's deploy the new tag and scale our app up with a worker:
+
+.. code::
+
+   git checkout 0.4.0-queuing
+   git push heroku 0.4.0-queuing^{}:master
+   heroku ps:scale worker=1
+
+We can watch the worker in action by tailing the Heroku logs:
+
+.. code::
+
+   heroku logs --tail
+
+From the user's perspective, our app can now return a response much faster for
+large uploads, and we are less likely to have availability problems due to
+overloaded web processes. There's a chance that the user clicks the word cloud
+link before the word count has been completed, but situations like this can be
+handled with Javascript that can show the link, or redirect the user, when
+informed of the job finishing. The Javascript client can communicate with the
+server via server-sent events, or fall back to polling for older browsers. But
+clever Javascript solutions are outside the scope of this tutorial, and left as
+an exercise for the reader ;)
+
+Summary
+=======
+
+Awesome! You can now:
+
+ - Provision and deploy to a production platform
+ - Use Amazon S3 for file storage
+ - Configure add-on services, such as Postgres and RabbitMQ
+ - Scale your application using additional web and worker processes
 
