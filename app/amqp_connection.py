@@ -2,20 +2,20 @@ import pika
 
 from app import app
 
-ampq_url = app.config['AMPQ_URI']
-ampq_params = pika.ConnectionParameters(
-    host=ampq_url.hostname,
-    virtual_host=ampq_url.path[1:],
+amqp_url = app.config['AMQP_URI']
+amqp_params = pika.ConnectionParameters(
+    host=amqp_url.hostname,
+    virtual_host=amqp_url.path[1:],
     credentials=pika.PlainCredentials(
-        ampq_url.username,
-        ampq_url.password,
+        amqp_url.username,
+        amqp_url.password,
     ))
 
-def get_ampq_connection():
-    return pika.BlockingConnection(ampq_params)
+def get_amqp_connection():
+    return pika.BlockingConnection(amqp_params)
 
-def test_ampq_connection():
-    connection = get_ampq_connection()
+def test_amqp_connection():
+    connection = get_amqp_connection()
     channel = connection.channel() # start a channel
     channel.queue_declare(queue='hello') # Declare a queue
     # send a message
@@ -36,4 +36,4 @@ def test_ampq_connection():
     connection.close()
 
 if __name__ == '__main__':
-    test_ampq_connection()
+    test_amqp_connection()
