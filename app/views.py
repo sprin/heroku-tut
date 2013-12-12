@@ -15,7 +15,6 @@ from utils import (
     slugify,
     put_doc_on_queue,
 )
-from word_count import count_words
 
 from app import app
 

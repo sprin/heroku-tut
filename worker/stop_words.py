@@ -1,4 +1,9 @@
 STOP_WORD_SET = set([
+    "one",
+    "two",
+    "three",
+    "four",
+    "man",
     "i",
     "me",
     "my",
