@@ -54,7 +54,6 @@ def test_conn():
         document_slug = 'fake_document',
         s3_key = 'files/does_not_exist.txt',
         filename = 'does_not_exist.txt',
-        word_counts = {},
     )
 
 def insert_file_upload_meta(
@@ -62,9 +61,8 @@ def insert_file_upload_meta(
     document_slug = None,
     s3_key = None,
     filename = None,
-    word_counts = None
 ):
-    if None in [document_name, document_slug, s3_key, filename, word_counts]:
+    if None in [document_name, document_slug, s3_key, filename]:
         return ValueError('missing required named params')
 
     t = tables.reflected['file_upload_meta']
@@ -76,7 +74,6 @@ def insert_file_upload_meta(
             document_slug = document_slug,
             s3_key = s3_key,
             filename = filename,
-            word_counts = json.dumps(word_counts),
         )
         .returning(
             t.c.document_name,
@@ -84,7 +81,6 @@ def insert_file_upload_meta(
             t.c.s3_key,
             t.c.time_uploaded,
             t.c.filename,
-            t.c.word_counts,
         )
     )
     result = result_as_list_of_dicts(query)

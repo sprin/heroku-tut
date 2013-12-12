@@ -30,10 +30,6 @@ def handle_upload():
     # Upload to S3 synchronously
     s3_key = s3_upload(f)
 
-    # Run word count on the file content
-    f.seek(0)
-    word_counts = count_words(f.read())
-
     # Create slug for document
     document_slug = slugify(document_name)
 
@@ -43,7 +39,6 @@ def handle_upload():
         document_slug = document_slug,
         s3_key = s3_key,
         filename = f.filename,
-        word_counts = word_counts,
     )
 
     flash(
