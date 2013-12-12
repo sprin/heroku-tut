@@ -37,17 +37,24 @@ Clone the tutorial repo and fetch all the tags:
    cd heroku-tut
    git fetch --tags
 
-
-In the Heroku UI, start a new app and give it a name. Use the format
-``{{your_handle}}-htut``, eg. ``sprin-htut``.
-
-In your local repo, add the newly-created Heroku repo as a remote:
+Use the Heroku CLI to start a new app, substituting your handle for
+{{your_handle}}. If you are in the same directory as the cloned repo, it will
+set up a new git remote called `heroku` for you. You always want to run this
+command in an empty repo, or in the repository you want to push.
 
 .. code::
 
-   git remote add heroku git@heroku.com:{{your_handle}}-htut.git
+    heroku apps:create {{your_handle}}-htut
 
-Push the first tag to Heroku to deploy!
+Push the first tag to Heroku to deploy! Since this is the first push, we actually
+need to push a branch, not a tag, so these commands differ slightly from the
+subsequent pushes:
+
+.. code::
+
+   git checkout 0.1.0-hello-world
+   git checkout -b init
+   git push heroku init:master
 
 .. code::
 
