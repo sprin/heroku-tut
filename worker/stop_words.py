@@ -4,6 +4,7 @@ STOP_WORD_SET = set([
     "three",
     "four",
     "man",
+    "m",
     "i",
     "me",
     "my",
