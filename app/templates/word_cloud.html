@@ -11,7 +11,7 @@
 <script>
   window.bootstrapped = {{bootstrapped|safe}}
   var fill = d3.scale.category20();
-  var max_text_size = 150;
+  var max_text_size = 100;
   var max_count = _.max(_.values(bootstrapped.word_counts));
   var scale_factor = max_text_size / max_count;
   var w = 800;
