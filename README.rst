@@ -54,11 +54,7 @@ subsequent pushes:
 
    git checkout 0.1.0-hello-world
    git checkout -b init
-   git push heroku init:master
-
-.. code::
-
-   git push heroku 0.1.0-hello-world^{}:master
+   git push -f heroku init:master
 
 Heroku only deploys code from pushes to it's master branch. However, above,
 we push a local tag to Heroku's master branch.
@@ -123,7 +119,7 @@ heroku config:set FLASK_SECRET_KEY={{secret_complex_random_value}}
 
 Now let's deploy this tag:
 
-  git push heroku 0.2.0-s3-uploads^{}:master
+  git push -f heroku 0.2.0-s3-uploads^{}:master
 
 Create a Postgres Database
 --------------------------
@@ -152,7 +148,7 @@ Now let's check out and push the tag which will read those config vars:
 .. code::
 
   git checkout 0.3.0-postgres
-  git push heroku 0.3.0-postgres^{}:master
+  git push -f heroku 0.3.0-postgres^{}:master
 
 Let's run a "one-off" dyno to create the initial table in Postgres:
 
@@ -220,7 +216,7 @@ Now let's deploy the new tag and scale our app up with a worker:
 .. code::
 
    git checkout 0.4.0-queuing
-   git push heroku 0.4.0-queuing^{}:master
+   git push -f heroku 0.4.0-queuing^{}:master
    heroku ps:scale worker=1
 
 We can watch the worker in action by tailing the Heroku logs:

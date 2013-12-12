@@ -62,6 +62,7 @@ def get_s3_path(key):
 def start_consuming():
     connection = get_amqp_connection()
     channel = connection.channel() # start a channel
+    channel.queue_declare(queue='countwords') # Declare a queue
 
     # create a function which is called on incoming messages
     def callback(ch, method, properties, body):
