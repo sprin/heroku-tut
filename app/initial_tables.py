@@ -8,10 +8,16 @@ def create_tables():
     cur = conn.cursor()
     cur.execute(
 """
+DROP TABLE IF EXISTS file_upload_meta;
+"""
+    )
+    conn.commit()
+    cur.execute(
+"""
 CREATE TABLE file_upload_meta(
     document_name TEXT NOT NULL
     , document_slug TEXT NOT NULL
-    , time_uploaded TEXT NOT NULL DEFAULT now()
+    , time_uploaded TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
     , s3_key TEXT NOT NULL
     , filename TEXT NOT NULL
     , word_counts JSON
@@ -20,6 +26,7 @@ CREATE TABLE file_upload_meta(
 """
     )
     conn.commit()
+    print "Created tables"
 
 if __name__ == '__main__':
     create_tables()
