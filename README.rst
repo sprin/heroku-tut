@@ -104,20 +104,23 @@ We need to set the following config vars for S3:
 
 .. code::
 
-   heroku config:set S3_LOCATION=https://s3-us-west-1.amazonaws.com/
-   heroku config:set S3_KEY={{your_s3_key}}
-   heroku config:set S3_SECRET={{your_s3_secret_key}}
-   heroku config:set S3_UPLOAD_DIRECTORY='files'
-   heroku config:set S3_BUCKET='{{your_handle}}-htut'
+   heroku config:set \
+       S3_LOCATION=https://s3-us-west-1.amazonaws.com/ \
+       S3_KEY={{your_s3_key}} \
+       S3_SECRET={{your_s3_secret_key}} \
+       S3_UPLOAD_DIRECTORY='files' \
+       S3_BUCKET='{{your_handle}}-htut'
 
 This example uses Flask sessions. To use sessions inside Flask, you need to
 set a secret key. It can be any secret, complex, random value.
 
 .. code::
 
-heroku config:set FLASK_SECRET_KEY={{secret_complex_random_value}}
+   heroku config:set FLASK_SECRET_KEY={{secret_complex_random_value}}
 
 Now let's deploy this tag:
+
+.. code::
 
   git push -f heroku 0.2.0-s3-uploads^{}:master
 
